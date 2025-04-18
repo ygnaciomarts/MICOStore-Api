@@ -26,7 +26,8 @@ public class ProductService {
                         product.getPrice(),
                         product.getStock(),
                         product.getImageUrl(),
-                        product.getCreatedAt()
+                        product.getCreatedAt(),
+                        product.getCategory()
                 ))
                 .collect(Collectors.toList());
     }
