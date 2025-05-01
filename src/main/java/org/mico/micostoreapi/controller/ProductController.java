@@ -2,6 +2,7 @@ package org.mico.micostoreapi.controller;
 
 import org.mico.micostoreapi.dto.ProductDTO;
 import org.mico.micostoreapi.service.ProductService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @Cacheable("products")
     @GetMapping
     public List<ProductDTO> getProducts() {
         return productService.getAllProducts();
