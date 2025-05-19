@@ -16,19 +16,21 @@ public class Product {
     private BigDecimal price;
     private Integer stock;
     private String imageUrl;
+    private String category;
     private LocalDateTime createdAt;
 
     // Constructor vacío (requerido por JPA)
     public Product() {}
 
     // Constructor con parámetros
-    public Product(Integer id, String name, String description, BigDecimal price, Integer stock, String imageUrl, LocalDateTime createdAt) {
+    public Product(Integer id, String name, String description, BigDecimal price, Integer stock, String imageUrl, String category, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.category = category;
         this.createdAt = createdAt;
     }
 
@@ -39,6 +41,7 @@ public class Product {
     public BigDecimal getPrice() { return price; }
     public Integer getStock() { return stock; }
     public String getImageUrl() { return imageUrl; }
+    public String getCategory() { return category; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     public void setId(Integer id) { this.id = id; }
@@ -47,5 +50,6 @@ public class Product {
     public void setPrice(BigDecimal price) { this.price = price; }
     public void setStock(Integer stock) { this.stock = stock; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setCategory(String category) { this.category = category; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
