@@ -1,5 +1,7 @@
 package org.mico.micostoreapi.dto;
 
+import org.mico.micostoreapi.model.User;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +27,18 @@ public class UserDTO {
         this.gender = gender;
         this.createdAt = createdAt;
         this.roles = roles;
+    }
+
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.name = user.getFirstName();
+        this.lastname = user.getLastName();
+        this.gender = user.getGender();
+        this.roles = user.getUserRoles().stream()
+                .map(ur -> ur.getRole().getName())
+                .toList();
     }
 
     // Getters
