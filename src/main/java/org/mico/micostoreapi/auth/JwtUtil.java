@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Base64;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -20,17 +20,25 @@ public class JwtUtil {
 
     private Key key;
 
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
+
     @PostConstruct
     public void init() {
         byte[] secretBytes = Base64.getDecoder().decode(secret);
         this.key = Keys.hmacShaKeyFor(secretBytes);
     }
 
-    public String generateToken(String subject) {
+    public String generateToken(String subject, List<String> roles) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", roles.stream()
+                .map(role -> "ROLE_" + role.toUpperCase())
+                .collect(Collectors.toList()));
+
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 día
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key)
                 .compact();
     }
