@@ -54,4 +54,8 @@ public class JwtUtil {
             return null;
         }
     }
+
+    public boolean isTokenValid(String token) {
+        return validateToken(token) != null;
+    }
 }

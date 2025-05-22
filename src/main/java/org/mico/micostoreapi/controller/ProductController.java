@@ -2,6 +2,8 @@ package org.mico.micostoreapi.controller;
 
 import org.mico.micostoreapi.dto.ProductDTO;
 import org.mico.micostoreapi.service.ProductService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @Cacheable("products")
     @GetMapping
     public List<ProductDTO> getProducts() {
         return productService.getAllProducts();
@@ -41,6 +44,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
+    @CacheEvict(value = "products", allEntries = true)
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO created = productService.createProduct(productDTO);
         return ResponseEntity.ok(created);
@@ -48,6 +52,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
+    @CacheEvict(value = "products", allEntries = true)
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         ProductDTO updated = productService.updateProduct(id, productDTO);
         if (updated != null) {
@@ -59,6 +64,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "products", allEntries = true)
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         boolean deleted = productService.deleteProduct(id);
         if (deleted) {

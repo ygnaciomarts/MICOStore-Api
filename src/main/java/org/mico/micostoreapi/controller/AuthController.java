@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,5 +63,24 @@ public class AuthController {
         );
 
         return ResponseEntity.ok(new JwtResponse(token, userDTO));
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<Map<String, String>> validateToken(@RequestHeader("Authorization") String token) {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            boolean isValid = jwtUtil.isTokenValid(token);
+
+            if (isValid) {
+                return ResponseEntity.ok(Collections.singletonMap("message", "Token is valid"));
+            } else {
+                return ResponseEntity.status(401).body(Collections.singletonMap("message", "Token is invalid or expired"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(Collections.singletonMap("message", "Token is invalid or expired"));
+        }
     }
 }
